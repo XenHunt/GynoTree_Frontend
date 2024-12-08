@@ -4,7 +4,12 @@ export interface Person {
   lastname: string;
   middlename: string | null;
   ismale: boolean;
-  parentsId: Array<number>;
+  childrenid: Array<number>;
 }
 
-export const apiUrl = "api/";
+export interface Family {
+  id: number;
+  name: string;
+}
+
+export const apiUrl = "http://127.0.0.1:5000/";

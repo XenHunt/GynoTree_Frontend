@@ -1,24 +1,24 @@
 // import { ref, computed } from "vue";
 import { defineStore } from "pinia";
-import { apiUrl, type Person } from "@/shared";
+import { apiUrl, type Person, type Family } from "@/shared";
 import axios from "axios";
 
-interface State {
+export interface State {
   selectedPersonId: number;
   selectedFamalyId: number | null;
   personsOfFamily: Array<Person> | null;
-  familyName: string;
-  familiesNames: Array<string> | null;
+  family: Family | null;
+  familiesArray: Array<Family> | null;
   isLoading: boolean;
 }
 
-export const useGraphStore = defineStore("counter", {
+export const useGraphStore = defineStore("base", {
   state: (): State => ({
     selectedPersonId: -1,
     selectedFamalyId: null,
     personsOfFamily: null,
-    familyName: "",
-    familiesNames: null,
+    family: null,
+    familiesArray: null,
     isLoading: false,
   }),
   getters: {
@@ -32,8 +32,21 @@ export const useGraphStore = defineStore("counter", {
   },
   actions: {
     loadFamilies() {
-      axios.get(apiUrl + "families").then((response) => {
-        this.familiesNames = response.data;
+      axios
+        .get(apiUrl + "family")
+        .then((response) => {
+          this.familiesArray = response.data;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    setFamily(id: number) {
+      this.isLoading = true;
+      axios.post(apiUrl + "families", { id: id }).then((response) => {
+        this.personsOfFamily = response.data.persons;
+        // this.
+        this.isLoading = false;
       });
     },
   },

@@ -1,3 +1,4 @@
+import GraphComponent from "@/components/GraphComponent.vue";
 import { createRouter, createWebHistory } from "vue-router";
 
 const router = createRouter({
@@ -6,7 +7,7 @@ const router = createRouter({
     {
       path: "/",
       name: "home",
-      component: `<div></div>`,
+      component: GraphComponent,
     },
   ],
 });
