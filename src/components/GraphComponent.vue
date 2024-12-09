@@ -12,11 +12,12 @@
   import { useNodeStore } from "@/stores/NodeStore";
   import { mapActions, mapState, mapStores } from "pinia";
   import BarComponent from "./BarComponent.vue";
-
-  const { onConnect, addEdges, onNodesChange, findNode, onNodeClick } =
+import { useRouter} from 'vue-router'
+  const { onConnect, addEdges, onNodesChange, findNode } =
     useVueFlow();
 
   const nodeStore = useNodeStore();
+const router = useRouter()
 
   function layoutGraph() {
     nodeStore.layoutGraph();
@@ -26,9 +27,11 @@
     console.log("Change Nodes");
   });
 
-  onNodeClick(({ event, node }) => {
-    console.log(node);
-  });
+function onNodeClick({ event, node }) {
+  console.log('Node clicked:', node, event);
+  if (node.id != 0)
+    router.push(`/edit_person/${node.id}`)
+}
 </script>
 <template>
   <div class="container">

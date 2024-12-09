@@ -1,3 +1,4 @@
+import EditPerson from "@/components/EditPerson.vue";
 import GraphComponent from "@/components/GraphComponent.vue";
 import InputComponent from "@/components/InputComponent.vue";
 import { createRouter, createWebHistory } from "vue-router";
@@ -15,6 +16,7 @@ const router = createRouter({
       name: "new_person",
       component: InputComponent,
     },
+    { path: "/edit_person/:id", component: EditPerson },
   ],
 });
 
