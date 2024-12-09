@@ -6,25 +6,44 @@
     setup() {
       const store = useGraphStore();
       const families = computed(() => store.familiesArray || []);
-      const family: Ref<"" | Family> = ref("");
+      const family: Ref<null | Family> = ref(null);
       function selectFamily() {
-        console.log(family.value.id);
+        // console.log(family)
+        store.setFamily(family.value);
       }
 
       return { store, families, selectFamily, family };
     },
-    created() {
-      this.store.loadFamilies();
-    },
   });
 </script>
 <template>
-  <div>
+  <div class="bar-container">
     <span v-if="families.length > 0">
-      <select v-model="family" @change="selectFamily">
-        <option disabled value="">Выберете семью</option>
-        <option v-for="fam in families" :value="fam">{{fam.name}}</option>
+      <select v-model="family" @change="selectFamily()">
+        <option disabled value="null">Выберете семью</option>
+        <option v-for="fam in families" :value="fam">{{ fam.name }}</option>
       </select>
+      <RouterLink to="/new_person">+</RouterLink>
     </span>
   </div>
 </template>
+
+<style lang="css" scoped>
+  select {
+    /* min-width */
+    min-width: 5%;
+    min-height: 5%;
+  }
+  .bar-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-items: auto;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: gray;
+  }
+  .btn {
+    margin: 5px;
+  }
+</style>

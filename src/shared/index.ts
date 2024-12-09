@@ -1,10 +1,10 @@
 export interface Person {
   id: number;
-  firstname: string;
-  lastname: string;
-  middlename: string | null;
-  ismale: boolean;
-  childrenid: Array<number>;
+  firstName: string;
+  lastName: string;
+  middleName: string | null;
+  is_male: boolean;
+  childrenId: Array<number>;
 }
 
 export interface Family {

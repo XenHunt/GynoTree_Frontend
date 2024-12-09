@@ -1,28 +1,74 @@
 <script lang="ts" setup>
-  import { nextTick, ref } from "vue";
-  import { Panel, VueFlow, useVueFlow } from "@vue-flow/core";
-  import { Background } from "@vue-flow/background";
-  import { useLayout } from "../layout/index";
-  useLayout;
+import { computed, ref } from "vue";
+import {
+  Panel,
+  VueFlow,
+  type Node,
+  type Edge,
+  useVueFlow,
+} from "@vue-flow/core";
+import { Background } from "@vue-flow/background";
+import { useLayout } from "../layout/index";
+import { useNodeStore } from "@/stores/NodeStore";
+import { mapActions, mapState, mapStores } from "pinia";
+import BarComponent from "./BarComponent.vue";
 
-  const { fitView } = useVueFlow();
+const { onConnect, addEdges, onNodesChange, findNode, onNodeClick } = useVueFlow();
 
-  const nodesDraggable = ref(false);
+const nodeStore = useNodeStore();
 
-  async function layoutGraph(direction) {
-    nodes.value = layout(nodes.value, edges.value, direction);
+function layoutGraph() {
+  nodeStore.layoutGraph();
+}
+onNodesChange((param) => {
+  console.log(findNode("0"))
+  console.log("Change Nodes");
+});
 
-    nextTick(() => {
-      fitView();
-    });
-  }
+onNodeClick(({ event, node }) => {
+  console.log(node)
+})
 </script>
 <template>
-  <VueFlow :nodes-draggable="nodesDraggable" width="400" height="400"></VueFlow>
+  <div class="container">
+    <BarComponent> </BarComponent>
+  </div>
+  <div class="layout-flow">
+    <VueFlow
+      :nodes-draggable="false"
+      :width="400"
+      :height="400"
+      :nodes="nodeStore.nodes"
+      :edges="nodeStore.edges"
+      @nodes-initialized="layoutGraph()"
+      fit-view-on-init
+      @node-change="onNodesChange"
+      @node-click="onNodeClick"
+    ></VueFlow>
+  </div>
 </template>
 
 <style lang="css">
-  @import "@vue-flow/core/dist/style.css";
+@import "@vue-flow/core/dist/style.css";
 
-  @import "@vue-flow/core/dist/theme-default.css";
+@import "@vue-flow/core/dist/theme-default.css";
+
+.container {
+  position: fixed;
+  top: 0;
+  right: 0;
+  /* min-width: 5%; */
+
+  z-index: 1000;
+}
+.layout-flow {
+  height: 100lh;
+  width: 100lh;
+}
+
+.container,
+.layout-flow {
+  display: flex;
+  gap: 10px;
+}
 </style>

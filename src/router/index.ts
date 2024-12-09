@@ -1,4 +1,5 @@
 import GraphComponent from "@/components/GraphComponent.vue";
+import InputComponent from "@/components/InputComponent.vue";
 import { createRouter, createWebHistory } from "vue-router";
 
 const router = createRouter({
@@ -8,6 +9,11 @@ const router = createRouter({
       path: "/",
       name: "home",
       component: GraphComponent,
+    },
+    {
+      path: "/new_person",
+      name: "new_person",
+      component: InputComponent,
     },
   ],
 });

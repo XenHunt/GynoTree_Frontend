@@ -1,10 +1,16 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from "vue-router";
-import BarComponent from "./components/BarComponent.vue";
+import { useGraphStore } from "./stores";
+// import BarComponent from "./components/BarComponent.vue";
+
+const store = useGraphStore()
+
+store.loadFamilies()
+
 </script>
 
 <template>
-  <BarComponent />
+
   <RouterView />
 </template>
 

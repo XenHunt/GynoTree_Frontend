@@ -2,10 +2,10 @@
 import { defineStore } from "pinia";
 import { apiUrl, type Person, type Family } from "@/shared";
 import axios from "axios";
+import { useNodeStore } from "./NodeStore";
 
 export interface State {
-  selectedPersonId: number;
-  selectedFamalyId: number | null;
+  selectedPerson: Person | null;
   personsOfFamily: Array<Person> | null;
   family: Family | null;
   familiesArray: Array<Family> | null;
@@ -14,8 +14,7 @@ export interface State {
 
 export const useGraphStore = defineStore("base", {
   state: (): State => ({
-    selectedPersonId: -1,
-    selectedFamalyId: null,
+    selectedPerson: null,
     personsOfFamily: null,
     family: null,
     familiesArray: null,
@@ -23,9 +22,9 @@ export const useGraphStore = defineStore("base", {
   }),
   getters: {
     getSelectedPerson(state: State) {
-      if (state.selectedPersonId) {
+      if (state.selectedPerson) {
         return state.personsOfFamily?.find(
-          (person) => person.id == state.selectedPersonId,
+          (person) => person.id == state.selectedPerson?.id,
         );
       }
     },
@@ -41,13 +40,23 @@ export const useGraphStore = defineStore("base", {
           console.log(error);
         });
     },
-    setFamily(id: number) {
+    setFamily(family: Family | null) {
+      if (!family) return;
       this.isLoading = true;
-      axios.post(apiUrl + "families", { id: id }).then((response) => {
-        this.personsOfFamily = response.data.persons;
-        // this.
-        this.isLoading = false;
-      });
+      const nodesStore = useNodeStore();
+      return axios
+        .post(apiUrl + "family", { id: family.id })
+        .then((response) => {
+          this.personsOfFamily = response.data.persons;
+          // console.log(this.personsOfFamily);
+          // this.
+          nodesStore.processAllNodes(
+            family.name,
+            response.data.persons,
+            response.data.roots,
+          );
+          this.isLoading = false;
+        });
     },
   },
 });
