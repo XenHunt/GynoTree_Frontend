@@ -51,7 +51,7 @@ export const useNodeStore = defineStore("node", {
         id: "0",
         position: { x: 0, y: 0 },
         data: {
-          label: familyName,
+          label: `Семья:\n${familyName}`,
         },
       });
 

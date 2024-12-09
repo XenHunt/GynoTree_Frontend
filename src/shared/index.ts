@@ -1,9 +1,12 @@
-export interface Person {
-  id: number;
+export interface PersonForm {
   firstName: string;
   lastName: string;
   middleName: string | null;
   is_male: boolean;
+}
+
+export interface Person extends PersonForm {
+  id: number;
   childrenId: Array<number>;
 }
 

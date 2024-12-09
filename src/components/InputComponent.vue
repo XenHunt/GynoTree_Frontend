@@ -12,11 +12,10 @@ export default defineComponent({
         lastName: "",
         middleName: "",
         is_male: true,
+        },
         family: {
           id: -1,
-          name: "",
-        },
-      },
+          name: "",},
     };
   },
   computed: {
@@ -27,7 +26,7 @@ export default defineComponent({
       return this.form.lastName.length != 0;
     },
     isFamilySelected() {
-      return this.form.family.name.length != 0;
+      return this.family.name.length != 0;
     },
     isFormValid() {
       return (
@@ -41,7 +40,12 @@ export default defineComponent({
   methods: {
     submitPerson(ev: Event) {
       ev.preventDefault();
-      console.log(this.form);
+      this.store.putNewPerson(this.form, this.family).then(()=>{
+        this.$router.push("/")
+
+      }).catch((err)=>{
+        console.log(err)
+      })
     },
   },
 });
@@ -67,7 +71,7 @@ export default defineComponent({
     </div>
     <div class="form-group">
       <label>Family Name</label>
-      <select v-model="form.family">
+      <select v-model="family">
         <option disabled value="">Выберете семью</option>
         <option v-for="family in familiesArray" :value="family">
           {{ family.name }}

@@ -1,33 +1,34 @@
 <script lang="ts" setup>
-import { computed, ref } from "vue";
-import {
-  Panel,
-  VueFlow,
-  type Node,
-  type Edge,
-  useVueFlow,
-} from "@vue-flow/core";
-import { Background } from "@vue-flow/background";
-import { useLayout } from "../layout/index";
-import { useNodeStore } from "@/stores/NodeStore";
-import { mapActions, mapState, mapStores } from "pinia";
-import BarComponent from "./BarComponent.vue";
+  import { computed, ref } from "vue";
+  import {
+    Panel,
+    VueFlow,
+    type Node,
+    type Edge,
+    useVueFlow,
+  } from "@vue-flow/core";
+  import { Background } from "@vue-flow/background";
+  import { useLayout } from "../layout/index";
+  import { useNodeStore } from "@/stores/NodeStore";
+  import { mapActions, mapState, mapStores } from "pinia";
+  import BarComponent from "./BarComponent.vue";
 
-const { onConnect, addEdges, onNodesChange, findNode, onNodeClick } = useVueFlow();
+  const { onConnect, addEdges, onNodesChange, findNode, onNodeClick } =
+    useVueFlow();
 
-const nodeStore = useNodeStore();
+  const nodeStore = useNodeStore();
 
-function layoutGraph() {
-  nodeStore.layoutGraph();
-}
-onNodesChange((param) => {
-  console.log(findNode("0"))
-  console.log("Change Nodes");
-});
+  function layoutGraph() {
+    nodeStore.layoutGraph();
+  }
+  onNodesChange((param) => {
+    console.log(findNode("0"));
+    console.log("Change Nodes");
+  });
 
-onNodeClick(({ event, node }) => {
-  console.log(node)
-})
+  onNodeClick(({ event, node }) => {
+    console.log(node);
+  });
 </script>
 <template>
   <div class="container">
@@ -49,26 +50,30 @@ onNodeClick(({ event, node }) => {
 </template>
 
 <style lang="css">
-@import "@vue-flow/core/dist/style.css";
+  @import "@vue-flow/core/dist/style.css";
 
-@import "@vue-flow/core/dist/theme-default.css";
+  @import "@vue-flow/core/dist/theme-default.css";
 
-.container {
-  position: fixed;
-  top: 0;
-  right: 0;
-  /* min-width: 5%; */
+  .container {
+    position: fixed;
+    top: 0;
+    right: 0;
+    /* min-width: 5%; */
 
-  z-index: 1000;
-}
-.layout-flow {
-  height: 100lh;
-  width: 100lh;
-}
+    z-index: 1000;
+  }
+  .layout-flow {
+      position: absolute;
+      align-items: center;
+      top:0;
+      left:0;
+      width:100%;
+      height:100vh;
+  }
 
-.container,
-.layout-flow {
-  display: flex;
-  gap: 10px;
-}
+  .container,
+  .layout-flow {
+    display: flex;
+    gap: 10px;
+  }
 </style>

@@ -1,6 +1,6 @@
 // import { ref, computed } from "vue";
 import { defineStore } from "pinia";
-import { apiUrl, type Person, type Family } from "@/shared";
+import { apiUrl, type Person, type Family, type PersonForm } from "@/shared";
 import axios from "axios";
 import { useNodeStore } from "./NodeStore";
 
@@ -30,6 +30,13 @@ export const useGraphStore = defineStore("base", {
     },
   },
   actions: {
+    putNewPerson(person: PersonForm, family: Family) {
+      return axios
+        .put(apiUrl + "person", { person: person, familyId: family.id })
+        .then((res) => {
+          this.setFamily(this.family); // TODO заменить на изменение в графе без обращения в БД
+        });
+    },
     loadFamilies() {
       axios
         .get(apiUrl + "family")
