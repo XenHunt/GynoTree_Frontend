@@ -12,7 +12,7 @@ export interface State {
 }
 const { layout } = useLayout();
 
-const { fitView, addNodes, addEdges } = useVueFlow();
+const { fitView, addNodes, addEdges, setNodes, setEdges } = useVueFlow();
 export const useNodeStore = defineStore("node", {
   state: (): State => ({
     edges: [],
@@ -38,6 +38,7 @@ export const useNodeStore = defineStore("node", {
         this.nodes = layout(this.nodes, this.edges);
         // console.log(nodes);
         nextTick(() => {
+          console.log("Fit");
           fitView();
         });
       });
@@ -47,6 +48,10 @@ export const useNodeStore = defineStore("node", {
       persons: Array<Person>,
       roots: Array<number>,
     ) {
+      this.nodes = [];
+      this.edges = [];
+      setNodes([]);
+      setEdges([]);
       this.nodes.push({
         id: "0",
         position: { x: 0, y: 0 },
@@ -75,7 +80,7 @@ export const useNodeStore = defineStore("node", {
       //   target: id.toString(),
       // });
       for (var person of persons) this.processOneNode(person);
-      // this.layoutGraph();
+      this.layoutGraph();
     },
     processOneNode(person: Person) {
       this.nodes.push({

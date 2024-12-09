@@ -4,7 +4,7 @@
   import { useEditStore } from "@/stores/EditStore";
   import axios from "axios";
   import { mapState } from "pinia";
-import { createTypeReferenceDirectiveResolutionCache } from "typescript";
+  import { createTypeReferenceDirectiveResolutionCache } from "typescript";
   import { defineComponent } from "vue";
 
   export default defineComponent({
@@ -29,21 +29,21 @@ import { createTypeReferenceDirectiveResolutionCache } from "typescript";
       };
     },
     created() {
-      
-
       this.editStore.loadPeople().then(() => {
         // let father, mother
-        axios.get(apiUrl + "person/" + this.$route.params.id).then((response) => {
-          this.form.firstName = response.data.person.firstName;
-          this.form.lastName = response.data.person.lastName;
-          this.form.middleName = response.data.person.middleName;
-          this.form.is_male = response.data.person.is_male;
-          this.selecters.father = response.data.parents.father;
-          this.selecters.mother = response.data.parents.mother;
-          console.log(response.data.family)
-          this.family = response.data.family || {id:-1, name:""}
-        });
-      })
+        axios
+          .get(apiUrl + "person/" + this.$route.params.id)
+          .then((response) => {
+            this.form.firstName = response.data.person.firstName;
+            this.form.lastName = response.data.person.lastName;
+            this.form.middleName = response.data.person.middleName;
+            this.form.is_male = response.data.person.is_male;
+            this.selecters.father = response.data.parents.father;
+            this.selecters.mother = response.data.parents.mother;
+            console.log(response.data.family);
+            this.family = response.data.family || { id: -1, name: "" };
+          });
+      });
     },
     computed: {
       isNotFirstNameEmpty() {
@@ -68,19 +68,26 @@ import { createTypeReferenceDirectiveResolutionCache } from "typescript";
     methods: {
       submitPerson(ev: Event) {
         ev.preventDefault();
-        const id = this.$route.params.id
-        if (!id)
-          return
-        const parents = Object.values(this.selecters)
+        const id = this.$route.params.id;
+        if (!id) return;
+        const parents = Object.values(this.selecters);
         this.editStore
           .updatePerson(id, this.form, this.family, parents)
           .then(() => {
-            this.store.setFamily(this.store.family)
+            this.store.setFamily(this.store.family);
             this.$router.push("/");
           })
           .catch((err) => {
             console.log(err);
           });
+      },
+      deletePerson() {
+        const id = this.$route.params.id;
+        if (!id) return;
+        this.editStore.deletePerson(id).then((_) => {
+          this.$router.push("/");
+          this.store.setFamily(this.store.family);
+        });
       },
     },
   });
@@ -132,10 +139,24 @@ import { createTypeReferenceDirectiveResolutionCache } from "typescript";
       </select>
     </div>
     <button :disabled="!isFormValid">Submit</button>
+    <div class="form-group">
+    <input type="button" class="btn" @click="deletePerson()">Delete</input>
+    </div>
   </form>
 </template>
 <style>
   .form-group {
     padding: 2px;
+  }
+  .btn {
+      
+      padding:0;
+      border:none;
+      height:20px;
+      width:40px;
+      /* line-height:normal; */
+      background: red;
+      /* height:100%; */
+      /* width: auto; */
   }
 </style>

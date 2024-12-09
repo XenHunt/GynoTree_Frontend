@@ -40,5 +40,8 @@ export const useEditStore = defineStore("edit", {
         parents: parents,
       });
     },
+    deletePerson(id: string) {
+      return axios.delete(apiUrl + "person/" + id);
+    },
   },
 });
